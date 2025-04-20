@@ -98,6 +98,14 @@ streamlit run app.py
 
 ---
 
+## 🖼️ ตัวอย่างหน้าจอแอป
+
+ภาพตัวอย่างแอป Rainfall Time Series Viewer ขณะใช้งาน:
+
+![screenshot](images/Example_OutRain.gif)
+
+---
+
 ## 📌 หมายเหตุ
 
 - ระบบนี้เป็น **ต้นแบบ (Prototype)** สำหรับการพัฒนา Dashboard ตรวจสอบข้อมูลฝนแบบ Near Real-Time
