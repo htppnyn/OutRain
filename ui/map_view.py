@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
-from datetime import timedelta
-from utils.db import load_station_locations, get_rainfall_data
-from utils.map_layer import create_map_layer
 import pydeck as pdk
+from datetime import timedelta
+from data.stations import load_station_locations
+from data.rainfall import get_rainfall_data
 
-def app():
+def show_map_view():
     st.title("Rainfall Time Series Viewer")
     st.subheader("แผนที่สถานีตรวจวัดฝน")
 
@@ -38,14 +38,20 @@ def app():
     lat_center = filtered_df["latitude"].mean()
     lon_center = filtered_df["longitude"].mean()
 
-    layer = create_map_layer(station_df.copy(), selected_station_code)
-
-    view_state = pdk.ViewState(
-        latitude=lat_center,
-        longitude=lon_center,
-        zoom=7.5,
-        pitch=0,
+    station_df["color"] = station_df["station_code"].apply(
+        lambda x: [255, 0, 0] if x == selected_station_code else [0, 0, 255, 50]
     )
+
+    layer = pdk.Layer(
+        "ScatterplotLayer",
+        data=station_df.rename(columns={"latitude": "lat", "longitude": "lon"}),
+        get_position='[lon, lat]',
+        get_fill_color="color",
+        get_radius=5000,
+        pickable=True
+    )
+
+    view_state = pdk.ViewState(latitude=lat_center, longitude=lon_center, zoom=7.5)
 
     st.pydeck_chart(pdk.Deck(
         layers=[layer],
